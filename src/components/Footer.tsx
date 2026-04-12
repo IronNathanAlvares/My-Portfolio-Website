@@ -2,18 +2,25 @@ import Image from 'next/image';
 import Script from 'next/script';
 
 export default function Footer() {
+  const contactEmail = process.env.NEXT_PUBLIC_CONTACT_EMAIL;
+  const contactPhone = process.env.NEXT_PUBLIC_CONTACT_PHONE;
+
   return (
     <footer className="site-footer">
       <div className="footer-inner">
         <div className="footer-left">
-          <a href="mailto:nathanlalvares03@gmail.com" className="footer-link footer-contact">
-            <Image className="icon icon-mail" src="/images/email-icon.svg" alt="Email" width={20} height={20} />
-            <span>nathanlalvares03@gmail.com</span>
-          </a>
-          <a href="tel:+353870398649" className="footer-link footer-contact" aria-label="Call Nathan">
-            <Image className="icon icon-phone" src="/images/phone-icon.png" alt="Phone" width={20} height={20} />
-            <span>+353 87 039 8649</span>
-          </a>
+          {contactEmail && (
+            <a href={`mailto:${contactEmail}`} className="footer-link footer-contact">
+              <Image className="icon icon-mail" src="/images/email-icon.svg" alt="Email" width={20} height={20} />
+              <span>{contactEmail}</span>
+            </a>
+          )}
+          {contactPhone && (
+            <a href={`tel:${contactPhone}`} className="footer-link footer-contact" aria-label="Call Nathan">
+              <Image className="icon icon-phone" src="/images/phone-icon.png" alt="Phone" width={20} height={20} />
+              <span>{contactPhone}</span>
+            </a>
+          )}
         </div>
         <div className="footer-right">
           <a className="footer-link footer-icon" href="https://www.linkedin.com/in/nathan-luis-alvares-1000061bb/" target="_blank" rel="noopener" aria-label="LinkedIn">
