@@ -96,9 +96,41 @@ const academicProjects = [
     description:
       "Reviewed AI approaches for real-time cardiac digital twins that could support clinicians without slow or invasive simulations. Compared nine methods across accuracy, speed, interpretability, and workflow fit, with HeartSimSage emerging as the strongest option for near real-time cardiac mechanics prediction.",
   },
+  {
+    title: "Final Year Project - Facial Recognition for Attendance",
+    period: "Jul 2022 - Jul 2023",
+    year: "2022-2023",
+    description:
+      "Designed a facial recognition system using MTCNN + FaceNet + SVM, achieving 98% recognition accuracy on a custom dataset of 500+ student images.",
+    repoUrl: "https://github.com/IronNathanAlvares/BE-COMP_22-23_Final-Year-Project",
+  },
+  {
+    title: "Clothing Management System",
+    period: "Sep 2021 - Oct 2021",
+    year: "2021",
+    description:
+      "C# Windows Forms app with login, billing, and customer management.",
+    repoUrl: "https://github.com/IronNathanAlvares/Clothing-Management-System",
+  },
+  {
+    title: "Bookshop Management System",
+    period: "Sep 2020 - Oct 2020",
+    year: "2020",
+    description:
+      "C++ project for book inventory and sales management.",
+    repoUrl: "https://github.com/IronNathanAlvares/Bookshop-Management-System",
+  },
 ];
 
 const personalProjects = [
+  {
+    title: "Portfolio website",
+    period: "Oct 2025",
+    year: "2025",
+    description:
+      "A modern portfolio site showcasing projects, interactive J.A.R.V.I.S-themed UI, and a serverless contact form (Vercel) with Node/Nodemailer backend. Built with vanilla HTML/CSS/JS and Three.js for lightweight 3D visuals.",
+    repoUrl: "https://github.com/IronNathanAlvares/My-Portfolio-Website",
+  },
   {
     title: "Labhair (Built at Craicathon)",
     period: "Mar 2026",
@@ -121,6 +153,38 @@ const personalProjects = [
     year: "2026",
     description:
       "A governance and treasury tool for GAA clubs on Solana, built for the Colosseum Solana Hackathon 2026. It includes multi-sig treasury approvals, on-chain AGM voting, automated grant reporting, inter-club payment rails, and NFT membership credentials.",
+  },
+  {
+    title: "QSTP 2023 Calculator",
+    period: "Aug 2023",
+    year: "2023",
+    description:
+      "Calculator built with HTML, CSS and JavaScript - supports basic arithmetic, keyboard input and a clean responsive UI for mobile and desktop.",
+    repoUrl: "https://github.com/IronNathanAlvares/QSTP-2023-Calculator",
+  },
+  {
+    title: "ChatGPT SEO Article Generator",
+    period: "Mar 2023",
+    year: "2023",
+    description:
+      "A Streamlit + Python app that uses ChatGPT to generate SEO-optimised articles. Includes prompts, templates and simple UI to set tone, keywords and length.",
+    repoUrl: "https://github.com/IronNathanAlvares/ChatGPT-SEO-Article-Generator",
+  },
+  {
+    title: "Internship-nucleus-project",
+    period: "Jan 2023",
+    year: "2023",
+    description:
+      "Internship project focused on automating core processes and building proof-of-concept tools to streamline team workflows, including data ingestion and processing pipelines.",
+    repoUrl: "https://github.com/IronNathanAlvares/Internship-nucleus-project",
+  },
+  {
+    title: "Internship-demo-project",
+    period: "Jan 2023",
+    year: "2023",
+    description:
+      "A compact demo repository from internship work demonstrating integration with internal APIs and a lightweight dashboard for visualising results.",
+    repoUrl: "https://github.com/IronNathanAlvares/Internship-demo-project",
   },
 ];
 
