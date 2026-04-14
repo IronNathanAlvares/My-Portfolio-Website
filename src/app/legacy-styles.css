@@ -2757,6 +2757,33 @@ section.section {
 	padding-right: 8px
 }
 
+.project-description {
+	max-height: 7.5rem;
+	overflow-y: auto;
+	padding-right: 6px;
+	margin-top: 0.55rem;
+	scrollbar-width: thin;
+	scrollbar-color: rgba(245, 195, 74, 0.65) rgba(0, 0, 0, 0.25)
+}
+
+.project-description p {
+	margin: 0
+}
+
+.project-description::-webkit-scrollbar {
+	width: 8px
+}
+
+.project-description::-webkit-scrollbar-track {
+	background: rgba(0, 0, 0, 0.22);
+	border-radius: 999px
+}
+
+.project-description::-webkit-scrollbar-thumb {
+	background: linear-gradient(180deg, rgba(245, 195, 74, 0.9), rgba(183, 28, 28, 0.85));
+	border-radius: 999px
+}
+
 .project-body .title-row {
 	display: flex;
 	align-items: center;
