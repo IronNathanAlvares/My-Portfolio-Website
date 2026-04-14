@@ -150,32 +150,6 @@ export default function Helmet3D({ size = 1 }: { size?: number }) {
     if (!dialogEl) return;
     const dialog = dialogEl as HTMLElement;
 
-    function clampDialogWithinReachOutBox() {
-      const liveWrapper = wrapperRef.current;
-      if (!liveWrapper) return;
-
-      const formBox = liveWrapper.closest('.form-box') as HTMLElement | null;
-      if (!formBox) return;
-
-      dialog.style.setProperty('--jarvis-shift-x', '0px');
-
-      const padding = 12;
-      const dialogRect = dialog.getBoundingClientRect();
-      const boxRect = formBox.getBoundingClientRect();
-
-      let shiftX = 0;
-      if (dialogRect.left < boxRect.left + padding) {
-        shiftX += (boxRect.left + padding) - dialogRect.left;
-      }
-      if (dialogRect.right > boxRect.right - padding) {
-        shiftX -= dialogRect.right - (boxRect.right - padding);
-      }
-
-      if (shiftX !== 0) {
-        dialog.style.setProperty('--jarvis-shift-x', `${Math.round(shiftX)}px`);
-      }
-    }
-
     const phraseVisibleMs = 5000;
     const phraseCooldownMs = 1800;
     const initialDelayMs = 1500;
@@ -197,9 +171,6 @@ export default function Helmet3D({ size = 1 }: { size?: number }) {
       dialog.classList.remove('hide');
       dialog.classList.add('show');
       dialog.textContent = text;
-
-      // Clamp the speech bubble so it never escapes the Reach Out form box bounds.
-      window.requestAnimationFrame(clampDialogWithinReachOutBox);
 
       // remain visible, then hide with a short exit animation window
       if (hideTimer) clearTimeout(hideTimer);
@@ -241,16 +212,8 @@ export default function Helmet3D({ size = 1 }: { size?: number }) {
     // timer-driven cycle only; no hover/click triggers
     cycleTimer = window.setTimeout(showNext, initialDelayMs);
 
-    function onResize() {
-      if (!dialog.hidden) {
-        clampDialogWithinReachOutBox();
-      }
-    }
-    window.addEventListener('resize', onResize);
-
     return () => {
       clearTimers();
-      window.removeEventListener('resize', onResize);
     };
   }, []);
 
