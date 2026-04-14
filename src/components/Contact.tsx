@@ -7,11 +7,15 @@ const IronMan3D = dynamic(() => import('./IronMan3D'), { ssr: false });
 const Helmet3D = dynamic(() => import('./Helmet3D'), { ssr: false });
 
 export default function Contact() {
+  const formSubmitEndpoint = process.env.NEXT_PUBLIC_FORMSUBMIT_ENDPOINT || '';
+
   const [countries, setCountries] = useState<any[]>([]);
   const [selectedFlag, setSelectedFlag] = useState<string>('');
   const [phoneCode, setPhoneCode] = useState<string>('+1');
   const [showDropdown, setShowDropdown] = useState<boolean>(false);
   const [searchText, setSearchText] = useState<string>('');
+  const [formStatus, setFormStatus] = useState<string>('');
+  const [formStatusType, setFormStatusType] = useState<'success' | 'error' | ''>('');
 
   useEffect(() => {
     fetch('/data/countries.json').then(r => r.json()).then((list) => {
@@ -53,11 +57,38 @@ export default function Contact() {
     const phone = String(formData.get('phone')||'');
     const message = String(formData.get('message')||'');
 
-    const res = await fetch('/api/contact', { method: 'POST', headers: { 'Content-Type':'application/json' }, body: JSON.stringify({ email, phone: `${phoneCode} ${phone}`, message }) });
-    if (res.ok) {
-      // keep existing success behavior
-      alert('Message sent successfully.');
-      form.reset();
+    setFormStatus('Sending your message...');
+    setFormStatusType('');
+
+    if (!formSubmitEndpoint) {
+      setFormStatus('Contact form is not configured yet. Please set NEXT_PUBLIC_FORMSUBMIT_ENDPOINT.');
+      setFormStatusType('error');
+      return;
+    }
+
+    const payload = {
+      email,
+      phone: `${phoneCode} ${phone}`,
+      message,
+      _subject: 'Portfolio Contact Form',
+      _captcha: 'false',
+      _template: 'table',
+    };
+
+    try {
+      const res = await fetch(formSubmitEndpoint, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+        },
+        body: JSON.stringify(payload),
+      });
+
+      if (res.ok) {
+        setFormStatus('Message sent successfully. Please check your email for FormSubmit activation if this is your first submission.');
+        setFormStatusType('success');
+        form.reset();
   // Show Jarvis meme GIF and a random send phrase in the send-dialog (next to the GIF)
   const jarvis = document.getElementById('jarvis-send-dialog');
   const jarvisGif = document.getElementById('jarvis-gif');
@@ -117,8 +148,24 @@ export default function Contact() {
         // allow idle phrases to resume
         (window as any).__jarvisBusy = false;
       }, 5500);
-    } else {
-      alert('Failed to send message.');
+      } else {
+        let reason = '';
+        try {
+          const errData = await res.json();
+          reason = errData?.message || errData?.error || '';
+        } catch {
+          reason = '';
+        }
+
+        const friendlyError = reason
+          ? `Failed to send message: ${reason}`
+          : 'Failed to send message. Please try again in a moment.';
+        setFormStatus(friendlyError);
+        setFormStatusType('error');
+      }
+    } catch {
+      setFormStatus('Could not reach the contact service. Please check your internet connection and try again.');
+      setFormStatusType('error');
     }
   }
 
@@ -202,7 +249,15 @@ export default function Contact() {
 
             <div className="form-row"><button type="submit" className="cta">Send message</button></div>
 
-            <div id="form-status" role="status" aria-live="polite" className="form-status"></div>
+            <div
+              id="form-status"
+              role="status"
+              aria-live="polite"
+              className="form-status"
+              style={{ color: formStatusType === 'error' ? '#ff7a7a' : formStatusType === 'success' ? '#9ef7b8' : undefined }}
+            >
+              {formStatus}
+            </div>
           </form>
 
           <div className="jarvis-area" style={{ position: 'relative' }}>

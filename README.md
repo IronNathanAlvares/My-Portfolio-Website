@@ -28,11 +28,9 @@ npm run dev
 
 ## Environment Variables
 
-Server-side (required for contact form email sending):
+Required (FormSubmit contact form endpoint):
 
-- `SENDGRID_API_KEY`
-- `CONTACT_TO_EMAIL`
-- `CONTACT_FROM_EMAIL`
+- `NEXT_PUBLIC_FORMSUBMIT_ENDPOINT` (example: `https://formsubmit.co/ajax/your-email@example.com`)
 
 Public (optional, shown in footer if set):
 
@@ -54,4 +52,4 @@ npm run build
 3. In Vercel Project Settings -> Environment Variables, add all required values from `.env.example`.
 4. Trigger deployment.
 
-If the contact environment variables are missing, `/api/contact` will return `503` with a configuration error.
+For FormSubmit, submit one test form once after setup so FormSubmit can activate/verify forwarding to your email.
