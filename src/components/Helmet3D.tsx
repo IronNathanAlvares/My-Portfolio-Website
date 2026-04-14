@@ -150,55 +150,70 @@ export default function Helmet3D({ size = 1 }: { size?: number }) {
   if (!dialogEl) return;
   const dialog = dialogEl as HTMLElement;
 
-    let current = 0;
+    const phraseVisibleMs = 5000;
+    const phraseCooldownMs = 1800;
+    const initialDelayMs = 1500;
+
     let hideTimer: number | null = null;
-    let intervalId: number | null = null;
+    let cycleTimer: number | null = null;
+    let hideAnimationTimer: number | null = null;
+    let lastPhraseIndex = -1;
 
     function clearTimers() {
       if (hideTimer) { clearTimeout(hideTimer); hideTimer = null; }
-      if (intervalId) { clearInterval(intervalId); intervalId = null; }
+      if (cycleTimer) { clearTimeout(cycleTimer); cycleTimer = null; }
+      if (hideAnimationTimer) { clearTimeout(hideAnimationTimer); hideAnimationTimer = null; }
     }
 
     function showPhrase(text: string) {
-      clearTimers();
       // ensure element is visible (remove hidden attribute) and show the animation
       dialog.hidden = false;
+      dialog.classList.remove('hide');
       dialog.classList.add('show');
       dialog.textContent = text;
-      // remain visible for 4 seconds, then hide with a short exit animation window
+
+      // remain visible, then hide with a short exit animation window
+      if (hideTimer) clearTimeout(hideTimer);
       hideTimer = window.setTimeout(() => {
         dialog.classList.remove('show');
+        dialog.classList.add('hide');
+
         // after the hide animation ends, set hidden=true so the element is truly removed from layout
-        window.setTimeout(() => { try { dialog.hidden = true; } catch (e) {} }, 420);
-      }, 4000);
+        if (hideAnimationTimer) clearTimeout(hideAnimationTimer);
+        hideAnimationTimer = window.setTimeout(() => {
+          try {
+            dialog.hidden = true;
+            dialog.classList.remove('hide');
+          } catch (e) {}
+        }, 360);
+      }, phraseVisibleMs);
+    }
+
+    function pickPhraseIndex() {
+      if (idlePhrases.length <= 1) return 0;
+      let idx = Math.floor(Math.random() * idlePhrases.length);
+      if (idx === lastPhraseIndex) idx = (idx + 1) % idlePhrases.length;
+      lastPhraseIndex = idx;
+      return idx;
     }
 
     function showNext() {
       // don't overwrite when Jarvis is busy (form submit GIF/dialog active)
-      if ((window as any).__jarvisBusy) return;
-      // pick a single random phrase each interval
-      const idx = Math.floor(Math.random() * idlePhrases.length);
+      if ((window as any).__jarvisBusy) {
+        cycleTimer = window.setTimeout(showNext, 900);
+        return;
+      }
+
+      const idx = pickPhraseIndex();
       showPhrase(idlePhrases[idx]);
+      cycleTimer = window.setTimeout(showNext, phraseVisibleMs + phraseCooldownMs);
     }
 
-    // start cycling after 7s, then every 7s
-    const startTimer = window.setTimeout(() => {
-      showNext();
-      intervalId = window.setInterval(showNext, 7000);
-    }, 7000);
-
-    // also allow immediate reveal on hover/click
-    function onEnter() { showNext(); }
-    function onClick() { showNext(); }
-
-    wrapper.addEventListener('pointerenter', onEnter);
-    wrapper.addEventListener('click', onClick);
+    // timer-driven cycle only; no hover/click triggers
+    cycleTimer = window.setTimeout(showNext, initialDelayMs);
 
     return () => {
       clearTimers();
-      wrapper.removeEventListener('pointerenter', onEnter);
-      wrapper.removeEventListener('click', onClick);
-      clearTimeout(startTimer);
     };
   }, []);
 
