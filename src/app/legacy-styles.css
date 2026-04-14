@@ -3111,11 +3111,14 @@ section.section {
 .contact-figure #jarvis-dialog {
 		position: absolute;
 		left: 50%;
+		right: auto;
+		top: auto;
 		transform: translateX(-50%);
 		bottom: calc(100% + 12px);
 		z-index: 65;
 		display: none;
-		width: auto;
+		width: fit-content;
+		height: auto;
 		max-width: 260px;
 		min-width: 150px;
 		padding: 12px 16px;
@@ -3206,8 +3209,8 @@ section.section {
 /* Jarvis dialog */
 .jarvis-dialog {
 	position: absolute;
-	right: 0;
-	top: -46px;
+	right: auto;
+	top: auto;
 	transform-origin: center bottom
 }
 
